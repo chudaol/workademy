@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Droppable } from "react-beautiful-dnd";
 import Color from "../../Utils/Color";
 import Content from "./Content";
 import Question from "./Question";
@@ -34,23 +35,23 @@ const ContentContainer = styled.div`
   justify-content: space-around;
   text-align: center;
   flex-wrap: wrap;
+  margin: 0 auto;
+  width: 90%;
 `;
 const QuestionContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
-  flex-wrap: wrap;
+  flex-direction: column;
   width: 90%;
   margin: 0 auto;
   padding: 5px;
   border-radius: 5px;
   background-color: ${Color.mainYellow};
-  height: 100px;
+  min-height: 100px;
 `;
 
 const QuizText = styled.div`
   font-weight: bold;
+  margin: 10px;
   font-size: 25px;
   color: ${Color.mainNavy};
   @media (max-width: 570px) {
@@ -58,22 +59,32 @@ const QuizText = styled.div`
   }
 `;
 
-function Lecture() {
+function Lecture(props) {
   return (
     <Container>
-      <Text>Lecture 1</Text>
+      <Text>Lecture {props.index + 1}</Text>
       <LectureContent>
         <ContentContainer>
-          <Content />
-          <Content />
-          <Content />
+          {props.contents.map((content) => (
+            <Content key={content.id} />
+          ))}
         </ContentContainer>
-        <QuestionContainer>
-          <QuizText>Quiz</QuizText>
-          <Question></Question>
-          <Question></Question>
-          <Question></Question>
-        </QuestionContainer>
+
+        <Droppable droppableId={String(props.lecture.id)}>
+          {(provided) => (
+            <QuestionContainer
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
+              <QuizText>Quiz</QuizText>
+
+              {props.questions.map((question, index) => (
+                <Question key={question.id} question={question} index={index} />
+              ))}
+              {provided.placeholder}
+            </QuestionContainer>
+          )}
+        </Droppable>
       </LectureContent>
     </Container>
   );

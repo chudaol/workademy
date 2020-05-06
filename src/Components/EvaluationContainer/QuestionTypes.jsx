@@ -35,7 +35,7 @@ const Card = styled(_Card)`
   justify-content: space-around;
 `;
 
-function QuestionTypes({ qType, setQType }) {
+function QuestionTypes({ qType, setQType, setQuestionName, questionName }) {
   return (
     <Card>
       <TextField
@@ -43,6 +43,8 @@ function QuestionTypes({ qType, setQType }) {
         variant="filled"
         multiline
         rows={4}
+        value={questionName}
+        onChange={(event) => setQuestionName(event.target.value)}
       ></TextField>
       <ButtonGroup
         orientation="vertical"
@@ -50,20 +52,20 @@ function QuestionTypes({ qType, setQType }) {
         variant="contained"
       >
         <Button
-          onClick={() => setQType("multiple-choice")}
-          className={qType === "multiple-choice" ? "active" : "not-active"}
+          onClick={() => setQType("MultipleChoice")}
+          className={qType === "MultipleChoice" ? "active" : "not-active"}
         >
           Multiple Choice
         </Button>
         <Button
-          onClick={() => setQType("single-choice")}
-          className={qType === "single-choice" ? "active" : "not-active"}
+          onClick={() => setQType("SingleChoice")}
+          className={qType === "SingleChoice" ? "active" : "not-active"}
         >
           Single Choice
         </Button>
         <Button
-          onClick={() => setQType("free-text")}
-          className={qType === "free-text" ? "active" : "not-active"}
+          onClick={() => setQType("FreeText")}
+          className={qType === "FreeText" ? "active" : "not-active"}
         >
           Free Text
         </Button>

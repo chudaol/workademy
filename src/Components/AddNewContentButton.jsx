@@ -1,16 +1,14 @@
 import React from "react";
-import Color from "../Utils/Color";
 import styled from "styled-components";
-import { SignButton } from "./styleButton";
-import Bin from "./Images/Bin.svg";
+import BinYellow from "../Components/Images/BinYellow.svg";
 
 const Li = styled.li`
-  color: ${Color.mainNavy};
+  color: ${({ theme }) => theme.Buttontext};
   font-size: 25px;
   text-align: center;
   font-weight: bold;
-
-  margin: 1em 0.5em 1em 0;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
 `;
 
 const ContentBin = styled.img`
@@ -25,40 +23,63 @@ const ContentTextField = styled.div`
   flex-direction: row;
 `;
 
+const ContentList = styled.div`
+  color: ${({ theme }) => theme.text};
+  font-size: 28px;
+  text-align: center;
+  font-weight: bolder;
+  margin-bottom: 0.8em;
+`;
+
+const ContentDetails = styled.p`
+  color: ${({ theme }) => theme.text};
+  font-size: 15px;
+`;
+
 function AddNewContentButton({
   contents,
   handleDeleteContent,
-  handlePlusSubmit,
   ContentText,
   handleDeleteTextContent,
   textContents,
+  renderContent,
+  renderType,
 }) {
   return (
     <div>
+      <ContentList>Here is the list of your {ContentText}</ContentList>
       {contents.map((content) => {
+        const text = renderContent
+          ? renderContent(content).slice(0, 30)
+          : content.value.slice(0, 30);
+        const type = renderType ? renderType(content) : content.type;
         return (
-          <ContentTextField>
-            <Li>{ContentText} </Li>
-            <ContentBin
-              onClick={() => handleDeleteContent(content)}
-              src={Bin}
-            />
-          </ContentTextField>
+          <div key={content.id}>
+            <ContentTextField>
+              <Li>{text}</Li>
+              <ContentBin
+                onClick={() => handleDeleteContent(content)}
+                src={BinYellow}
+              />
+            </ContentTextField>
+            <ContentDetails>{type}</ContentDetails>
+          </div>
         );
       })}
       {textContents.map((textContent) => {
         return (
-          <ContentTextField>
-            <Li>Content </Li>
-            <ContentBin
-              onClick={() => handleDeleteTextContent(textContent)}
-              src={Bin}
-            />
-          </ContentTextField>
+          <div key={textContent.id}>
+            <ContentTextField>
+              <Li>{textContent.value.slice(0, 30)}</Li>
+              <ContentBin
+                onClick={() => handleDeleteTextContent(textContent)}
+                src={BinYellow}
+              />
+            </ContentTextField>
+            <ContentDetails>Text</ContentDetails>
+          </div>
         );
       })}
-
-      <SignButton onClick={handlePlusSubmit}>+</SignButton>
     </div>
   );
 }

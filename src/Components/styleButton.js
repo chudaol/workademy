@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Color from "../Utils/Color";
 
+
 const Button = styled.button`
   cursor: pointer;
   font-family: sans-serif;
@@ -22,8 +23,8 @@ const VerbsButton = styled(Button)`
 `;
 
 const NavigationButton = styled(Button)`
-  color: ${Color.mainWhite};
-  background: ${Color.mainNavy};
+  background: ${({ theme }) => theme.NavButtonBody};
+  color: ${({ theme }) => theme.ButtonText};
   font-size: 0.9em;
   padding: 0.7em 0.7em;
   border-radius: 25px;
@@ -34,8 +35,8 @@ const NavigationButton = styled(Button)`
 `;
 
 const SignButton = styled(Button)`
-  color: ${Color.mainWhite};
-  background: ${Color.mainNavy};
+  background: ${({ theme }) => theme.ButtonBody};
+  color: ${({ theme }) => theme.ButtonText};
   font-size: 3em;
   padding: 0.01em 0.8em 0.08em 0.8em;
   border-radius: 14px;
@@ -67,10 +68,12 @@ const ContentButton = styled(VerbsButton)`
   font-size: 1.2em;
   border-radius: 1px;
   margin-left: 3%;
-  padding: 0.8em 0.8em;
+  //padding: 0.8em 0.8em;
+  padding: 0.8em 2em;
   @media (max-width: 800px) {
     font-size: 0.8em;
-    padding: 0.6em 0.6em;
+    //padding: 0.6em 0.6em;
+    padding: 0.6em 1em;
   }
 `;
 

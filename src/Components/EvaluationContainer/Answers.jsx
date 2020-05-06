@@ -1,17 +1,13 @@
 import React from "react";
-
-import _Card from "@material-ui/core/Card";
 import styled from "styled-components";
 import Color from "../../Utils/Color";
 import SingleChoice from "./AnswerTypes/SingleChoice";
 import MultipleChoice from "./AnswerTypes/MultipleChoice";
 import { SaveButton } from "../styleButton";
 
-const Card = styled(_Card)`
+const Container = styled.div`
   width: 90%;
   padding-left: 5%;
-
-  background-color: green;
 `;
 const Text = styled.div`
   font-size: 20px;
@@ -27,21 +23,44 @@ const ButtonField = styled.div`
   margin: 10px;
 `;
 
-function Answers({ qType }) {
+function Answers({
+  qType,
+  addQuestion,
+  answers,
+  setAnswers,
+  setCorrectAnswer,
+  correctAnswer,
+}) {
   return (
-    <Card>
-      {(qType === "single-choice" && <SingleChoice />) ||
-        (qType === "multiple-choice" && <MultipleChoice />) ||
-        (qType === "free-text" && (
+    <Container>
+      {(qType === "SingleChoice" && (
+        <SingleChoice
+          setAnswers={setAnswers}
+          answers={answers}
+          setCorrectAnswer={setCorrectAnswer}
+          correctAnswer={correctAnswer}
+        />
+      )) ||
+        (qType === "MultipleChoice" && (
+          <MultipleChoice
+            setAnswers={setAnswers}
+            answers={answers}
+            setCorrectAnswer={setCorrectAnswer}
+            correctAnswer={correctAnswer}
+          />
+        )) ||
+        (qType === "FreeText" && (
           <Text>We will ask user to submit a free form answer</Text>
         )) || <Text>Choose the question type</Text>}
 
       {qType && (
         <ButtonField>
-          <SaveButton type="submit">Save</SaveButton>
+          <SaveButton type="submit" onClick={addQuestion}>
+            Save
+          </SaveButton>
         </ButtonField>
       )}
-    </Card>
+    </Container>
   );
 }
 

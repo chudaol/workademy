@@ -1,16 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import "./style.js";
 import styled from "styled-components";
 import AddNewContentButton from "../../Components/AddNewContentButton";
 import ContentContainer from "../../Components/ContentContainer/ContentContainer";
-// import CourseSummaryButton from "../../Components/CourseSummaryButton";
-import { RightSection, ButtonsContainer, BlueTobBar } from "../StylePages";
+import { RightSection, ButtonsContainer } from "../StylePages";
 import QuestionSelect from "../../Components/Select/QuestionSelect";
 import { NavigationButton } from "../../Components/styleButton";
-import {
-  ResponsiveYellowButton,
-  CenterButtonContainer,
-} from "../../Components/ResponsiveYellowButton";
+import { connect } from "react-redux";
+import { useEffect } from "react";
 
 const ContentField = styled.div`
   display: flex;
@@ -22,13 +19,45 @@ const ContentLeft = styled.div`
 `;
 
 function ContentPage(props) {
-  const [contents, setContents] = useState([]);
-  const [link, setLink] = useState("");
   const [error, setError] = useState(null);
-  const [hint, setHint] = useState(null);
+  const [link, setLink] = useState("");
   const [text, setText] = useState("");
-  const [textContents, setTextContents] = useState([]);
-  const [questionId, setQuestionId] = useState(10);
+  const [questionId, setQuestionId] = useState("");
+  const [goalQuestions, setGoalQuestions] = useState([]);
+  const [selectedType, setSelectedType] = useState();
+  const [contents, textContents] = useMemo(() => {
+    const links = [];
+    const texts = [];
+    (props.contents || []).forEach((item) => {
+      if (item.questionId !== questionId) return;
+      if (item.type !== "HTML") {
+        links.push(item);
+      } else {
+        texts.push(item);
+      }
+    });
+    return [links, texts];
+  }, [props.contents, questionId]);
+
+  useEffect(() => {
+    if (!props.questions || !props.selectedGoal) {
+      setQuestionId("");
+      setGoalQuestions([]);
+      return;
+    }
+    const firstQuestion = props.questions.find(
+      (question) => question.goalId === props.selectedGoal.id
+    );
+
+    setGoalQuestions(
+      props.questions.filter((q) => q.goalId === props.selectedGoal.id)
+    );
+    setQuestionId(firstQuestion ? firstQuestion.id : "");
+  }, [props.questions, props.selectedGoal]);
+
+  const handleSelectType = (type) => {
+    setSelectedType(type);
+  };
 
   //for select
   const handleSelectChange = (event) => {
@@ -36,17 +65,23 @@ function ContentPage(props) {
   };
 
   //for Text
+
   const handleTextChange = (event) => {
     setText(event.target.value);
   };
   const handleTextSubmit = (event) => {
-    console.log(text);
     event.preventDefault();
     handleCreateText(text);
     setText("");
   };
+
   const handleCreateText = (text) => {
-    setTextContents([...textContents, text]);
+    props.dispatch({
+      type: "CREATE_CONTENT",
+      contentValue: text,
+      questionId: questionId,
+      contentType: "HTML",
+    });
   };
 
   // for others
@@ -54,11 +89,20 @@ function ContentPage(props) {
     setLink(event.target.value);
   };
 
+  const handleCreateContent = (link) => {
+    props.dispatch({
+      type: "CREATE_CONTENT",
+      contentValue: link,
+      questionId: questionId,
+      contentType: selectedType,
+    });
+  };
+
   const handleValueSubmit = (event) => {
     event.preventDefault();
     if (
       !link.match(
-        /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/
+        /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-/]))?/
       )
     ) {
       setError("Please provide a valid link");
@@ -69,32 +113,21 @@ function ContentPage(props) {
     }
   };
 
-  const handleCreateContent = (link) => {
-    setContents([...contents, link]);
-  };
-
-  // for add content on the side
-  const handleDeleteContent = (link) => {
-    setContents(contents.filter((element) => element !== link));
-  };
-
-  const handleDeleteTextContent = (text) => {
-    setTextContents(textContents.filter((element) => element !== text));
-  };
-
-  const handlePlusSubmit = () => {
-    setHint("Please add a content");
-    setInterval(() => {
-      setHint("");
-    }, 3000);
+  // for delete content on the side
+  const handleDeleteContent = (content) => {
+    //setContents(contents.filter((element) => element !== link));
+    props.dispatch({
+      type: "DELETE_CONTENT",
+      id: content.id,
+    });
   };
 
   return (
     <RightSection>
-      {/* <BlueTobBar>Question 1: Blended Learning is... </BlueTobBar> */}
       <QuestionSelect
         handleSelectChange={handleSelectChange}
         questionId={questionId}
+        questions={goalQuestions}
       />
       <ContentField>
         <ContentLeft>
@@ -104,39 +137,44 @@ function ContentPage(props) {
             handleValueChange={handleValueChange}
             link={link}
             error={error}
-            hint={hint}
             handleTextSubmit={handleTextSubmit}
             handleTextChange={handleTextChange}
             text={text}
             textContents={textContents}
+            selectedType={selectedType}
+            setSelectedType={setSelectedType}
+            handleSelectType={handleSelectType}
           />
         </ContentLeft>
         <ol>
           <AddNewContentButton
             contents={contents}
             handleDeleteContent={handleDeleteContent}
-            handlePlusSubmit={handlePlusSubmit}
             ContentText="Content"
-            handleDeleteTextContent={handleDeleteTextContent}
+            handleDeleteTextContent={handleDeleteContent}
             textContents={textContents}
           />
         </ol>
       </ContentField>
-      <CenterButtonContainer>
-        <ResponsiveYellowButton onClick={props.nextStep}>
-          Summary
-        </ResponsiveYellowButton>
-      </CenterButtonContainer>
+
       <ButtonsContainer>
         <NavigationButton onClick={props.previousStep}>
           Previous Step
         </NavigationButton>
-        <NavigationButton onClick={() => props.goToStep(3)}>
-          add new goal
+        <NavigationButton onClick={() => props.goToStep(2)}>
+          Next Step
         </NavigationButton>
       </ButtonsContainer>
     </RightSection>
   );
 }
 
-export default ContentPage;
+function mapStateToProps(state) {
+  const { selectedGoal, questions } = state.course;
+  return {
+    selectedGoal: selectedGoal,
+    questions,
+    contents: state.course.contents,
+  };
+}
+export default connect(mapStateToProps)(ContentPage);

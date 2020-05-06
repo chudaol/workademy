@@ -1,7 +1,6 @@
 import React from "react";
 import Logo from "../Images/Logo.svg";
 import styled from "styled-components";
-import { Device } from "../../Utils/Device";
 import ProgressBar from "./ProgressBar";
 import { LeftBar } from "../../Pages/StylePages";
 
@@ -14,9 +13,6 @@ const SideBarContainer = styled.div`
   max-width: 190px;
   height: 100%;
   background-color: #f0f0f0;
-  /* @media only screen and (max-width: 500px) {
-    max-width: 150px;
-  } */
 `;
 
 const LogoSmall = styled.img`
@@ -27,11 +23,11 @@ const LogoSmall = styled.img`
   max-width: 100%;
 `;
 
-const SideBar = ({ currentStep }) => (
+const SideBar = ({ currentStep, goToStep }) => (
   <LeftBar>
     <SideBarContainer>
       <LogoSmall src={Logo} />
-      <ProgressBar currentStep={currentStep} />
+      <ProgressBar currentStep={currentStep} goToStep={goToStep} />
     </SideBarContainer>
   </LeftBar>
 );

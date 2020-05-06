@@ -17,8 +17,8 @@ export const lightTheme = createMuiTheme({
     },
 
     text: {
-      primary: `${Color.mainNavy}`,
-      secondary: `${Color.mainWhite}`,
+      light: `${Color.mainNavy}`,
+      dark: `${Color.mainWhite}`,
     },
 
     background: { default: `${Color.mainWhite}` },

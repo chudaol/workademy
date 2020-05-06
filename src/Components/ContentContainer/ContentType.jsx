@@ -9,7 +9,8 @@ const Box = styled(_Box)`
   padding: 2%;
   margin: 5%;
   display: flex;
-  justify-content: center;
+  // justify-content: center;
+  justify-content: space-evenly;
 `;
 
 function ContentType({ types, handleSelectType, selectedType }) {
@@ -18,6 +19,7 @@ function ContentType({ types, handleSelectType, selectedType }) {
       {types.map((type) => {
         return (
           <ContentButton
+            key={type}
             style={{
               backgroundColor:
                 selectedType === type

@@ -34,6 +34,7 @@ function VerbItem({ title, verbs, handleSelectVerb, selectedVerbs }) {
         {verbs.map((verb) => {
           return (
             <VerbsButton
+              key={verb}
               style={{
                 backgroundColor:
                   selectedVerbs === verb

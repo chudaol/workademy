@@ -7,9 +7,11 @@ import Color from "../../Utils/Color";
 import ContentType from "./ContentType";
 import types from "./Type";
 import { ReactTinyLink } from "react-tiny-link";
-import { HintMessage } from "../../Pages/StylePages";
-import _Box from "@material-ui/core/Box";
 import _Typography from "@material-ui/core/Typography";
+
+const TextBlueHeader = styled(TextSmallHeader)`
+  color: ${Color.mainNavy};
+`;
 
 const Card = styled(_Card)`
   width: 95%;
@@ -33,29 +35,24 @@ function ContentContainer({
   error,
   handleValueSubmit,
   handleValueChange,
-  hint,
   handleTextSubmit,
   handleTextChange,
   text,
   textContents,
+  selectedType,
+  setSelectedType,
+  handleSelectType,
 }) {
-  const [selectedType, setSelectedType] = useState();
-
-  const handleSelectType = (type) => {
-    setSelectedType(type);
-  };
-
   return (
     <div>
       <Card>
-        <TextSmallHeader>Related Content</TextSmallHeader>
+        <TextBlueHeader>Related Content</TextBlueHeader>
 
         <ContentType
           types={types}
           handleSelectType={handleSelectType}
           selectedType={selectedType}
         />
-        {hint && <HintMessage>{hint}</HintMessage>}
         <ContentInput
           selectedType={selectedType}
           handleValueSubmit={handleValueSubmit}
@@ -69,8 +66,8 @@ function ContentContainer({
 
         {textContents.map((textContent) => {
           return (
-            <LinkField>
-              <Typography> {textContent}</Typography>
+            <LinkField key={textContent.id}>
+              <Typography> {textContent.value}</Typography>
             </LinkField>
           );
         })}
@@ -78,11 +75,12 @@ function ContentContainer({
           {contents.map((content) => {
             return (
               <ReactTinyLink
+                key={content.id}
                 cardSize="small"
                 showGraphic={true}
                 maxLine={2}
                 minLine={1}
-                url={content}
+                url={content.value}
               />
             );
           })}

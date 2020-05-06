@@ -3,10 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
+import StepButton from "@material-ui/core/StepButton";
 import StepContent from "@material-ui/core/StepContent";
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
 const theme = createMuiTheme({
@@ -37,11 +35,13 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     minWidth: "50px",
     fontSize: "1em",
+    cursor: "pointer",
   },
 
   button: {
     marginTop: theme.spacing(1),
     marginRight: theme.spacing(1),
+
     active: {
       color: "#253858",
     },
@@ -57,6 +57,12 @@ const useStyles = makeStyles((theme) => ({
   resetContainer: {
     padding: theme.spacing(3),
   },
+
+  // buttonBase: {
+  //   root: {
+  //     tabindex: "-1",
+  //   },
+  // },
 }));
 
 function getSteps() {
@@ -70,22 +76,13 @@ function getSteps() {
   ];
 }
 
-export default function ProgressBar({ currentStep }) {
+export default function ProgressBar({ currentStep, goToStep }) {
   const classes = useStyles();
-  // const [activeStep, setActiveStep] = React.useState(currentStep);
   const activeStep = currentStep - 1;
   const steps = getSteps();
 
-  // const handleNext = () => {
-  //   setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  // };
-
-  // const handleBack = () => {
-  //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  // };
-
-  const handleReset = () => {
-    // setActiveStep(0);
+  const handleStep = (step) => () => {
+    goToStep(step + 1);
   };
 
   return (
@@ -98,21 +95,10 @@ export default function ProgressBar({ currentStep }) {
         >
           {steps.map((label, index) => (
             <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-              <StepContent>
-                <div className={classes.actionsContainer}></div>
-              </StepContent>
+              <StepLabel onClick={handleStep(index)}>{label}</StepLabel>
             </Step>
           ))}
         </Stepper>
-        {activeStep === steps.length && (
-          <Paper square elevation={0} className={classes.resetContainer}>
-            <Typography>All steps completed - you&apos;re finished</Typography>
-            <Button onClick={handleReset} className={classes.button}>
-              Reset
-            </Button>
-          </Paper>
-        )}
       </div>
     </ThemeProvider>
   );

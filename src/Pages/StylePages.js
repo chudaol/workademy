@@ -11,15 +11,13 @@ export const GlobalColor = createGlobalStyle`
   body {
     background: ${({ theme }) => theme.body};
     color: ${({ theme }) => theme.text};
-    transition: all 0.25s linear;
+    max-width: 100vw
 
   }`;
 
 export const PageContainer = styled.div`
   > div {
     flex-direction: row;
-    background: ${({ theme }) => theme.body};
-    color: ${({ theme }) => theme.text};
     display: flex;
     > div:nth-child(2) {
       flex-grow: 1;
@@ -41,8 +39,12 @@ export const BlueTobBar = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${Color.mainNavy};
+  background: ${Color.mainNavy};
   color: ${Color.mainWhite};
+  border-bottom: 1.8px solid ${Color.mainWhite};
+  /* background: ${({ theme }) => theme.HeaderBackground};
+  color: ${({ theme }) => theme.HeaderText}; */
+  
 `;
 
 export const ButtonsContainer = styled.div`
@@ -54,18 +56,20 @@ export const ButtonsContainer = styled.div`
 export const GoalsPage = styled.div`
   display: flex;
   flex-direction: column;
+  
 `;
 
 export const Header = styled.div`
   font-size: 30px;
   text-align: center;
+  
+ 
 `;
 
 export const TextHeader = styled.div`
   font-size: 40px;
   text-align: center;
   font-weight: bold;
-  color: ${Color.mainNavy};
   margin-top: 2em;
   @media (max-width: 700px) {
     font-size: 30px;
@@ -91,4 +95,5 @@ export const HintMessage = styled.div`
 export const ErrorMessage = styled(HintMessage)`
   justify-content: flex-end;
   padding-right: 15px;
+  
 `;

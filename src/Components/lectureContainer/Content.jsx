@@ -4,7 +4,7 @@ import Color from "../../Utils/Color";
 
 // styles
 const Container = styled.div`
-  width: 25%;
+  width: 20%;
   background-color: ${Color.mainWhite};
   color: ${Color.mainNavy};
   height: 50px;
@@ -13,6 +13,7 @@ const Container = styled.div`
   justify-content: center;
   align-content: center;
   flex-direction: column;
+  margin: 2.5%;
 `;
 const Text = styled.div`
   padding: 3px;

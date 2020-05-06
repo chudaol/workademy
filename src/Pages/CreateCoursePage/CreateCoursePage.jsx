@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 // Dependencies
 import { useHistory } from "react-router-dom";
@@ -29,12 +29,10 @@ import { useDarkMode } from "../../Utils/Themes/UseDarkMode";
 import { lightTheme, darkTheme } from "../../Utils/Themes/Theme";
 
 function CreateCoursePage() {
-  const [theme, toggleTheme, componentMounted] = useDarkMode();
+  const [theme, toggleTheme] = useDarkMode();
   const themeMode = theme === "light" ? lightTheme : darkTheme;
   const history = useHistory();
-  if (!componentMounted) {
-    return <div />;
-  }
+
   return (
     <ThemeProvider theme={themeMode}>
       <GlobalColor />

@@ -14,11 +14,19 @@ const Radio = styled(_Radio)`
   }
 `;
 
-export default function SingleChoice() {
-  const [correctAnswer, setCorrectAnswer] = React.useState();
-
+export default function SingleChoice({
+  setAnswers,
+  answers,
+  correctAnswer,
+  setCorrectAnswer,
+}) {
   const handleChange = (event) => {
-    setCorrectAnswer(event.target.value);
+    setCorrectAnswer([event.target.value]);
+  };
+  const handleAnswerChange = (index, value) => {
+    let newAnswers = answers.slice();
+    newAnswers[index] = value;
+    setAnswers(newAnswers);
   };
 
   return (
@@ -26,32 +34,22 @@ export default function SingleChoice() {
       <FormLabel component="legend">
         Provide your answers and select the correct one
       </FormLabel>
-      <RadioGroup
-        aria-label="gender"
-        name="gender1"
-        value={correctAnswer}
-        onChange={handleChange}
-      >
-        <FormControlLabel
-          value="1"
-          control={<Radio />}
-          label={<TextField id="standard-basic" />}
-        />
-        <FormControlLabel
-          value="2"
-          control={<Radio />}
-          label={<TextField id="standard-basic" />}
-        />
-        <FormControlLabel
-          value="3"
-          control={<Radio />}
-          label={<TextField id="standard-basic" />}
-        />
-        <FormControlLabel
-          value="4"
-          control={<Radio />}
-          label={<TextField id="standard-basic" />}
-        />
+      <RadioGroup value={correctAnswer[0] || ""} onChange={handleChange}>
+        {answers.map((answer, index) => (
+          <FormControlLabel
+            key={index}
+            value={String(index + 1)}
+            control={<Radio />}
+            label={
+              <TextField
+                value={answer}
+                onChange={(event) =>
+                  handleAnswerChange(index, event.target.value)
+                }
+              />
+            }
+          />
+        ))}
       </RadioGroup>
     </FormControl>
   );

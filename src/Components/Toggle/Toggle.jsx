@@ -19,7 +19,7 @@ const ToggleContainer = styled.div`
   position: relative;
   position: absolute;
   right: 0;
-  z-index: 1;
+  z-index: 2;
   width: 3rem;
   height: 1.5rem;
   &:focus {
@@ -27,9 +27,9 @@ const ToggleContainer = styled.div`
   }
 
   @media ${Device.tablet} {
-    width: 5rem;
-    height: 2.5rem;
-    padding: 0.5rem;
+    width: 4rem;
+    height: 1.8rem;
+    padding: 0.3rem;
     border-radius: 15px;
   }
 
@@ -41,7 +41,6 @@ const ToggleContainer = styled.div`
 `;
 
 const Toggle = ({ theme, toggleTheme }) => {
-  const isLight = theme === "light";
   return (
     <div>
       <ToggleContainer onClick={toggleTheme}>

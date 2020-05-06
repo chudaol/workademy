@@ -51,10 +51,14 @@ function CourseNamePage({ courseName, courseDescription, nextStep, dispatch }) {
     });
   }
 
+  // localstorage for username
+  let userObject = localStorage.getItem("user");
+  let userName = (userObject && userObject.name) || "Admin";
+
   return (
     <RightSection>
       <TextHeader>
-        Hey Olga! 👋
+        Hey {userName}! 👋
         <br />
         What's the name of your course?
       </TextHeader>

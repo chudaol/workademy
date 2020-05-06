@@ -13,12 +13,24 @@ import {
   TextSmallHeader,
   RightSection,
 } from "../StylePages";
+import { useEffect } from "react";
 
 function DefineGoalPage(props) {
   const [isErrorVisible, setIsErrorVisible] = useState(false);
 
+  // TODO get values from selected goal if not empty
   const [selectedVerbs, setSelectedVerbs] = useState();
-  const [goalName, setGoalName] = useState();
+  const [goalName, setGoalName] = useState("");
+
+  useEffect(() => {
+    if (props.selectedGoal) {
+      setSelectedVerbs(props.selectedGoal.verb);
+      setGoalName(props.selectedGoal.name);
+    } else {
+      setSelectedVerbs("");
+      setGoalName("");
+    }
+  }, [props.selectedGoal]);
 
   function showErrorMessage() {
     if (isErrorVisible) {
@@ -39,11 +51,20 @@ function DefineGoalPage(props) {
     setSelectedVerbs(verb);
   }
   function addGoal() {
-    props.dispatch({
-      type: "CREATE_GOAL",
-      verb: selectedVerbs,
-      name: goalName,
-    });
+    if (props.selectedGoal) {
+      props.dispatch({
+        type: "UPDATE_GOAL",
+        verb: selectedVerbs,
+        name: goalName,
+        id: props.selectedGoal.id,
+      });
+    } else {
+      props.dispatch({
+        type: "CREATE_GOAL",
+        verb: selectedVerbs,
+        name: goalName,
+      });
+    }
   }
 
   return (
@@ -77,5 +98,9 @@ function DefineGoalPage(props) {
     </RightSection>
   );
 }
-
-export default connect()(DefineGoalPage);
+function mapStateToProps(state) {
+  return {
+    selectedGoal: state.course.selectedGoal,
+  };
+}
+export default connect(mapStateToProps)(DefineGoalPage);

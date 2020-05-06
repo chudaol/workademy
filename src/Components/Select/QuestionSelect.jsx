@@ -11,32 +11,40 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
 const FormHelperText = styled(_FormHelperText)`
-  display: flex;
-  justify-content: center;
+  && {
+    color: ${({ theme }) => theme.text};
+  }
+  > div {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 const Select = styled(_Select)`
   > div {
     color: ${Color.mainWhite};
+    border-bottom: 1.8px solid ${Color.mainWhite};
     font-size: 20px;
     padding: 1.5em;
     display: flex;
     justify-content: center;
   }
 
-  background-color: ${Color.mainNavy};
+  background: ${Color.mainNavy};
 `;
 
-function QuestionSelect({ questionId, handleSelectChange }) {
+function QuestionSelect({ questionId, handleSelectChange, questions }) {
   return (
     <Container>
       <FormControl variant="outlined" fullWidth>
         <Select value={questionId} onChange={handleSelectChange}>
-          <MenuItem value={10}>Question 1: Question here</MenuItem>
-          <MenuItem value={20}>Question 2: Question here</MenuItem>
-          <MenuItem value={30}>Question 3: Question here</MenuItem>
+          {questions &&
+            questions.map((question, index) => (
+              <MenuItem value={question.id} key={question.id}>
+                Question {index + 1}: {question.name}
+              </MenuItem>
+            ))}
         </Select>
         <FormHelperText>Click to select another question</FormHelperText>
       </FormControl>

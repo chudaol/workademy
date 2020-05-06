@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { Device } from "../Utils/Device";
 import Color from "../Utils/Color";

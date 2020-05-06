@@ -9,6 +9,7 @@ function VerbContainer({ handleSelectVerb, selectedVerbs }) {
       {skills.map((skill) => {
         return (
           <VerbItem
+            key={skill.title}
             title={skill.title}
             verbs={skill.verbs}
             handleSelectVerb={handleSelectVerb}

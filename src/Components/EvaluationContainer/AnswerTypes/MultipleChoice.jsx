@@ -1,5 +1,4 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import FormLabel from "@material-ui/core/FormLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
@@ -17,19 +16,27 @@ const Checkbox = styled(_Checkbox)`
   }
 `;
 
-export default function MultipleChoice() {
-  const [state, setState] = React.useState({
-    gilad: false,
-    jason: false,
-    antoine: false,
-    jason2: false,
-  });
-
+export default function MultipleChoice({
+  setAnswers,
+  answers,
+  correctAnswer,
+  setCorrectAnswer,
+}) {
   const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
+    console.log(event.target.checked);
+    if (event.target.checked) {
+      setCorrectAnswer([...correctAnswer, event.target.value]);
+    } else {
+      setCorrectAnswer(
+        correctAnswer.filter((value) => value !== event.target.value)
+      );
+    }
   };
-
-  const { gilad, jason, antoine, jason2 } = state;
+  const handleAnswerChange = (index, value) => {
+    let newAnswers = answers.slice();
+    newAnswers[index] = value;
+    setAnswers(newAnswers);
+  };
 
   return (
     <div>
@@ -38,38 +45,28 @@ export default function MultipleChoice() {
           Provide your answers and click on checkbox for all correct ones.
         </FormLabel>
         <FormGroup>
-          <FormControlLabel
-            control={
-              <Checkbox checked={gilad} onChange={handleChange} name="gilad" />
-            }
-            label={<TextField id="standard-basic" />}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox checked={jason} onChange={handleChange} name="jason" />
-            }
-            label={<TextField id="standard-basic" />}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={jason2}
-                onChange={handleChange}
-                name="jason2"
-              />
-            }
-            label={<TextField id="standard-basic" />}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={antoine}
-                onChange={handleChange}
-                name="antoine"
-              />
-            }
-            label={<TextField id="standard-basic" />}
-          />
+          {answers.map((answer, index) => (
+            <FormControlLabel
+              key={index}
+              control={
+                // ["","","",""]
+                //[2,3]
+                <Checkbox
+                  checked={correctAnswer.includes(String(index + 1))}
+                  onChange={handleChange}
+                  value={String(index + 1)}
+                />
+              }
+              label={
+                <TextField
+                  value={answer}
+                  onChange={(event) =>
+                    handleAnswerChange(index, event.target.value)
+                  }
+                />
+              }
+            />
+          ))}
         </FormGroup>
       </FormControl>
     </div>

@@ -1,6 +1,6 @@
 import React from "react";
 
-import FormHelperText from "@material-ui/core/FormHelperText";
+import _FormHelperText from "@material-ui/core/FormHelperText";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import _Select from "@material-ui/core/Select";
@@ -13,21 +13,34 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
+const FormHelperText = styled(_FormHelperText)`
+  && {
+    color: ${({ theme }) => theme.text};
+  }
+  > div {
+    display: flex;
+    justify-content: center;
+  }
+`;
+
 const Select = styled(_Select)`
   > div {
     color: ${Color.mainNavy};
   }
-  background-color: ${Color.mainYellow};
+  background-color: ${({ theme }) => theme.ModuleSelect};
 `;
 
-function ModuleSelect({ goalId, handleChange }) {
+function ModuleSelect({ goalId, handleChange, goals }) {
   return (
     <Container>
       <FormControl variant="outlined" fullWidth>
         <Select value={goalId} onChange={handleChange}>
-          <MenuItem value={10}>Module 1: Goal here</MenuItem>
-          <MenuItem value={20}>Module 2: Goal here</MenuItem>
-          <MenuItem value={30}>Module 3: Goal here</MenuItem>
+          {goals &&
+            goals.map((goal, index) => (
+              <MenuItem value={goal.id} key={goal.id}>
+                Module {index + 1}: {goal.verb} {goal.name}
+              </MenuItem>
+            ))}
         </Select>
         <FormHelperText>Click to select another goal</FormHelperText>
       </FormControl>
