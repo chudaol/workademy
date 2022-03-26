@@ -10,7 +10,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "acorn": "^7.1.1",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-beautiful-dnd": "^13.0.0",
